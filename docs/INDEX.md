@@ -9,9 +9,10 @@
 | [architecture/OVERVIEW.md](./architecture/OVERVIEW.md) | 시스템 아키텍처 (Expo + Spring Boot + Claude) | 프로젝트 구조 파악 시 |
 | [architecture/DATA_MODEL.md](./architecture/DATA_MODEL.md) | PostgreSQL 데이터 모델 | DB/엔티티 관련 작업 시 |
 | [architecture/API_CONTRACTS.md](./architecture/API_CONTRACTS.md) | Spring Boot REST API 명세 | API 작업 시 |
+| [architecture/IMPLEMENTATION_STATUS.md](./architecture/IMPLEMENTATION_STATUS.md) | 문서-코드 구현 현황 추적 | 드리프트 점검/마일스톤 관리 |
 | [patterns/CODING_CONVENTIONS.md](./patterns/CODING_CONVENTIONS.md) | 코딩 컨벤션 (모바일 + 백엔드) | 코드 작성 시 |
 | [patterns/ERROR_HANDLING.md](./patterns/ERROR_HANDLING.md) | 에러 처리 전략 | 에러 처리 구현 시 |
-| [patterns/TESTING.md](./patterns/TESTING.md) | 테스트 전략 (Jest + JUnit) | 테스트 작성 시 |
+| [patterns/TESTING.md](./patterns/TESTING.md) | 테스트 전략 (Phase 0/1) | 테스트 작성 시 |
 | [patterns/ACCESSIBILITY.md](./patterns/ACCESSIBILITY.md) | 접근성 가이드 | UI 구현 시 (필독) |
 | [domain/chat/README.md](./domain/chat/README.md) | 채팅 기능 도메인 (Spring AI + Expo) | 채팅 기능 작업 시 |
 | [domain/voice/README.md](./domain/voice/README.md) | 음성 인터페이스 도메인 | 음성 기능 작업 시 |
