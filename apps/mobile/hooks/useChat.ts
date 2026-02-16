@@ -9,7 +9,7 @@ const initialState: ChatState = {
   error: null,
 };
 
-export function useChat(sessionId: string) {
+export function useChat(userId: number) {
   const [state, setState] = useState<ChatState>(initialState);
 
   const send = useCallback(
@@ -30,7 +30,7 @@ export function useChat(sessionId: string) {
         error: null,
       }));
 
-      const response = await sendMessage(sessionId, content.trim());
+      const response = await sendMessage(userId, content.trim());
 
       if (response.success && response.data) {
         setState((prev) => ({
@@ -46,7 +46,7 @@ export function useChat(sessionId: string) {
         }));
       }
     },
-    [sessionId, state.isLoading],
+    [userId, state.isLoading],
   );
 
   const clearError = useCallback(() => {

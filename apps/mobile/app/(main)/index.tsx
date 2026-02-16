@@ -8,7 +8,7 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <View style={styles.chatContainer}>
-        <ChatWindow sessionId="default" />
+        <ChatWindow userId={1} />
       </View>
     </SafeAreaView>
   );

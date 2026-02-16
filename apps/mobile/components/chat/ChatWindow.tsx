@@ -6,11 +6,11 @@ import { COLORS } from '@/constants/colors';
 import { useChat } from '@/hooks/useChat';
 
 interface ChatWindowProps {
-  readonly sessionId: string;
+  readonly userId: number;
 }
 
-export default function ChatWindow({ sessionId }: ChatWindowProps) {
-  const { messages, isLoading, send } = useChat(sessionId);
+export default function ChatWindow({ userId }: ChatWindowProps) {
+  const { messages, isLoading, send } = useChat(userId);
 
   return (
     <View style={styles.container}>
