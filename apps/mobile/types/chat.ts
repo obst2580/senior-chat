@@ -13,8 +13,8 @@ export interface ChatSession {
 }
 
 export interface SendMessageRequest {
-  readonly sessionId: string;
-  readonly content: string;
+  readonly userId: number;
+  readonly message: string;
 }
 
 export interface SendMessageResponse {

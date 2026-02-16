@@ -10,6 +10,17 @@ interface ApiResponse<T> {
   readonly error?: string;
 }
 
+interface ServerError {
+  readonly code: string;
+  readonly message: string;
+}
+
+interface ServerResponse<T> {
+  readonly success: boolean;
+  readonly data?: T;
+  readonly error?: ServerError;
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {},
@@ -24,37 +35,51 @@ async function request<T>(
     },
   });
 
+  let json: ServerResponse<T> | null = null;
+  try {
+    json = (await response.json()) as ServerResponse<T>;
+  } catch {
+    json = null;
+  }
+
   if (!response.ok) {
     return {
       success: false,
-      error: `Request failed: ${response.status}`,
+      error: json?.error?.message ?? `Request failed: ${response.status}`,
     };
   }
 
-  const data = (await response.json()) as T;
-  return { success: true, data };
+  if (!json?.success) {
+    return {
+      success: false,
+      error: json?.error?.message ?? '요청에 실패했어요. 다시 시도해주세요.',
+    };
+  }
+
+  return { success: true, data: json.data };
 }
 
 export async function sendMessage(
-  sessionId: string,
-  content: string,
+  userId: number,
+  message: string,
 ): Promise<ApiResponse<SendMessageResponse>> {
-  return request<SendMessageResponse>('/api/chat/send', {
+  return request<SendMessageResponse>('/api/v1/chat/send', {
     method: 'POST',
-    body: JSON.stringify({ sessionId, content }),
+    body: JSON.stringify({ userId, message }),
   });
 }
 
 export async function getChatHistory(
-  sessionId: string,
+  userId: number,
 ): Promise<ApiResponse<readonly Message[]>> {
-  return request<readonly Message[]>(`/api/chat/history/${sessionId}`);
+  return request<readonly Message[]>(`/api/v1/chat/history/${userId}`);
 }
 
 export async function createSession(): Promise<
   ApiResponse<{ readonly sessionId: string }>
 > {
-  return request<{ readonly sessionId: string }>('/api/chat/session', {
-    method: 'POST',
-  });
+  return {
+    success: false,
+    error: '세션 생성 API는 아직 준비 중이에요.',
+  };
 }
