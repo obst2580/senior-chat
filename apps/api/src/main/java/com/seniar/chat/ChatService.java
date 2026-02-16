@@ -16,7 +16,7 @@ public class ChatService {
     private final AiOrchestrator aiOrchestrator;
 
     @Transactional
-    public String chat(Long userId, String userMessage) {
+    public ChatMessage chat(Long userId, String userMessage) {
         ChatMessage userMsg = ChatMessage.builder()
                 .userId(userId)
                 .role("user")
@@ -33,9 +33,7 @@ public class ChatService {
                 .content(aiReply)
                 .createdAt(LocalDateTime.now())
                 .build();
-        chatRepository.save(assistantMsg);
-
-        return aiReply;
+        return chatRepository.save(assistantMsg);
     }
 
     @Transactional(readOnly = true)
