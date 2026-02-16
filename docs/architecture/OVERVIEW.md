@@ -69,7 +69,7 @@ seniar-chat/
 | Chat Screen | `apps/mobile/app/(main)/` | 메인 채팅 화면 |
 | Chat Components | `apps/mobile/components/chat/` | 채팅 UI (메시지 버블, 입력 등) |
 | Voice Components | `apps/mobile/components/voice/` | 마이크 버튼, TTS 재생 |
-| API Client | `apps/mobile/lib/api.ts` | Spring Boot API 호출 |
+| API Client | `apps/mobile/lib/api-client.ts` | Spring Boot API 호출 |
 | Chat Controller | `apps/api/.../chat/ChatController.java` | REST 엔드포인트 |
 | Chat Service | `apps/api/.../chat/ChatService.java` | 비즈니스 로직 |
 | AI Service | `apps/api/.../ai/AiService.java` | Spring AI + Claude 연동 |
@@ -87,7 +87,7 @@ seniar-chat/
 | Cache | Redis | 세션, 대화 컨텍스트 임시 저장 |
 | STT | Whisper API | 한국어 음성 인식 |
 | TTS | OpenAI TTS (or Clova) | 자연스러운 한국어 음성 합성 |
-| Testing | Jest + JUnit 5 + Playwright | 프론트/백엔드/E2E |
+| Testing | TypeScript typecheck + JUnit 5 (Phase 0), Vitest/Playwright (Phase 1 목표) | 프론트/백엔드/E2E |
 
 ## 데이터 흐름
 
