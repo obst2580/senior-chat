@@ -1,6 +1,23 @@
 # API Contracts
 
-> Spring Boot REST API - Base URL: `http://localhost:8080/api/v1`
+> Spring Boot REST API - Base URL: `http://localhost:8080` (prefix: `/api/v1`)
+
+## 상태 (문서 vs 구현)
+
+이 문서는 목표 계약(Phase 1)을 먼저 정의하고, 현재 구현(Phase 0)을 함께 기록한다.
+
+### Phase 0 (현재 구현)
+
+- Chat
+  - `POST /api/v1/chat/send` (JSON, 단일 응답)
+  - `GET /api/v1/chat/history/{userId}`
+- Auth
+  - `POST /api/v1/auth/verify-phone` (placeholder)
+  - `POST /api/v1/auth/confirm` (placeholder)
+- 인증/JWT
+  - 현재는 JWT 검증 미적용 (모든 `/api/**` 요청 허용)
+- SSE 스트리밍
+  - 미구현
 
 ## 인증
 
@@ -12,6 +29,8 @@ Authorization: Bearer <token>
 ---
 
 ## Chat API
+
+## Chat API (Phase 1 - 목표)
 
 ### POST /api/v1/chat
 
@@ -33,6 +52,62 @@ data: {"type":"done","messageId":"uuid","conversationId":"uuid"}
 ```
 
 **인증:** Bearer Token 필수
+
+---
+
+## Chat API (Phase 0 - 현재 구현)
+
+### POST /api/v1/chat/send
+
+AI 대화 엔드포인트 (단일 JSON 응답)
+
+**Request:**
+```json
+{
+  "userId": 1,
+  "message": "안녕"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "message": {
+      "id": "123",
+      "role": "assistant",
+      "content": "안녕하세요! 다솜이예요. 오늘 하루는 어떠셨어요?",
+      "createdAt": "2026-02-16T10:00:05"
+    }
+  }
+}
+```
+
+### GET /api/v1/chat/history/{userId}
+
+특정 사용자의 메시지 히스토리 조회
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1",
+      "role": "user",
+      "content": "안녕",
+      "createdAt": "2026-02-16T10:00:00"
+    },
+    {
+      "id": "2",
+      "role": "assistant",
+      "content": "안녕하세요! 다솜이예요.",
+      "createdAt": "2026-02-16T10:00:05"
+    }
+  ]
+}
+```
 
 ### GET /api/v1/chat/conversations
 
@@ -149,6 +224,49 @@ data: {"type":"done","messageId":"uuid","conversationId":"uuid"}
 ```
 
 ---
+
+## Auth API (Phase 0 - 현재 구현)
+
+> 아래 엔드포인트는 아직 placeholder이며, Phase 1 목표(Auth API 섹션)의 `send-code/verify-code/refresh`로 수렴한다.
+
+### POST /api/v1/auth/verify-phone
+
+전화번호 인증 시작 (placeholder)
+
+**Request:**
+```json
+{
+  "phoneNumber": "010-1234-5678"
+}
+```
+
+**Response:**
+```json
+{
+  "status": "pending",
+  "message": "인증번호가 발송되었습니다."
+}
+```
+
+### POST /api/v1/auth/confirm
+
+인증 코드 확인 및 토큰 발급 (placeholder)
+
+**Request:**
+```json
+{
+  "phoneNumber": "010-1234-5678",
+  "code": "123456"
+}
+```
+
+**Response:**
+```json
+{
+  "status": "verified",
+  "token": "placeholder-jwt-token"
+}
+```
 
 ## User API
 

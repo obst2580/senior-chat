@@ -2,6 +2,27 @@
 
 > PostgreSQL 기반 엔티티 설계
 
+## 상태 (문서 vs 구현)
+
+이 문서는 목표 스키마(Phase 1)를 정의한다. 현재 구현(Phase 0)은 일부 엔티티만 존재하며 스키마가 다르다.
+
+### Phase 0 (현재 구현)
+
+- 식별자
+  - JPA 엔티티는 `Long` ID(IDENTITY) 기반
+- Chat
+  - `chat_messages`는 `conversation_id`가 없고 `user_id` 기반으로 메시지를 묶는다
+  - 구현 파일: `apps/api/src/main/java/com/seniar/chat/ChatMessage.java`, `apps/api/src/main/java/com/seniar/chat/ChatRepository.java`
+- User
+  - 최소 필드만 존재(전화번호, 닉네임, 구독 티어 등)
+  - 구현 파일: `apps/api/src/main/java/com/seniar/user/User.java`
+- Conversation/Subscription
+  - Phase 1 목표(아래)로 계획되어 있으나 아직 미구현
+
+### Phase 1 (목표)
+
+- UUID 기반 `users`, `conversations`, `chat_messages` 및 (Phase 2) `subscriptions`
+
 ## ER Diagram
 
 ```
@@ -18,6 +39,9 @@ CREATE TABLE users (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone_number    VARCHAR(20) NOT NULL UNIQUE,
     name            VARCHAR(50),
+    region_city     VARCHAR(30),
+    region_district VARCHAR(30),
+    region_dong     VARCHAR(30),
     font_size       VARCHAR(20) DEFAULT 'large',
     voice_enabled   BOOLEAN DEFAULT true,
     voice_speed     DECIMAL(2,1) DEFAULT 0.8,
@@ -32,6 +56,9 @@ CREATE TABLE users (
 | id | UUID | PK |
 | phone_number | VARCHAR(20) | 전화번호 (인증용, 유니크) |
 | name | VARCHAR(50) | 이름/호칭 (온보딩에서 수집) |
+| region_city | VARCHAR(30) | 시/도 (서울특별시, 경기도 등) |
+| region_district | VARCHAR(30) | 구/시 (강남구, 수원시 등) |
+| region_dong | VARCHAR(30) | 동/읍/면 (역삼동, 매탄동 등) |
 | font_size | VARCHAR(20) | 'normal', 'large', 'extra-large' |
 | voice_enabled | BOOLEAN | TTS 자동 재생 여부 |
 | voice_speed | DECIMAL | TTS 속도 (0.5~2.0) |
@@ -120,27 +147,15 @@ CREATE TABLE subscriptions (
 
 ## Java Entity (참고)
 
-```java
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+### Phase 0 (현재 구현)
 
-    @Column(nullable = false, unique = true)
-    private String phoneNumber;
+- `User`: `apps/api/src/main/java/com/seniar/user/User.java`
+  - `Long id` (IDENTITY)
+  - `phoneNumber`, `nickname`, `tier`, `createdAt`, `lastActiveAt`
+- `ChatMessage`: `apps/api/src/main/java/com/seniar/chat/ChatMessage.java`
+  - `Long id` (IDENTITY)
+  - `Long userId`, `role`, `content`, `createdAt`
 
-    private String name;
-    private String fontSize;
-    private Boolean voiceEnabled;
-    private BigDecimal voiceSpeed;
-    private Boolean onboardingDone;
+### Phase 1 (목표)
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-}
-```
+- UUID 기반 `User/Conversation/ChatMessage`로 확장 (위 SQL 스키마 참고)
