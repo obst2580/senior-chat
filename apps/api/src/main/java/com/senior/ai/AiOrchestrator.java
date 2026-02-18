@@ -17,6 +17,8 @@ public class AiOrchestrator {
     private final PersonaConfig personaConfig;
     private final List<ToolCallbackProvider> toolCallbackProviders;
 
+    private volatile ChatClient toolAwareChatClient;
+
     public String generateReply(Long userId, String userMessage) {
         return generateReply(userId, userMessage, personaConfig.getSystemPrompt());
     }
@@ -29,16 +31,9 @@ public class AiOrchestrator {
 
     private String generateReply(Long userId, String userMessage, String systemPrompt) {
         try {
-            ChatClient.Builder builder = chatClientBuilder
-                    .defaultSystem(systemPrompt);
-
-            for (ToolCallbackProvider provider : toolCallbackProviders) {
-                builder = builder.defaultToolCallbacks(provider);
-            }
-
-            ChatClient chatClient = builder.build();
-
-            return chatClient.prompt()
+            return getToolAwareClient()
+                    .prompt()
+                    .system(systemPrompt)
                     .user(userMessage)
                     .call()
                     .content();
@@ -46,6 +41,21 @@ public class AiOrchestrator {
             log.error("AI call failed, returning fallback response: {}", e.getMessage());
             return generateFallbackReply(userMessage);
         }
+    }
+
+    private ChatClient getToolAwareClient() {
+        if (toolAwareChatClient == null) {
+            synchronized (this) {
+                if (toolAwareChatClient == null) {
+                    ChatClient.Builder builder = chatClientBuilder;
+                    for (ToolCallbackProvider provider : toolCallbackProviders) {
+                        builder = builder.defaultToolCallbacks(provider);
+                    }
+                    toolAwareChatClient = builder.build();
+                }
+            }
+        }
+        return toolAwareChatClient;
     }
 
     private String generateFallbackReply(String userMessage) {
