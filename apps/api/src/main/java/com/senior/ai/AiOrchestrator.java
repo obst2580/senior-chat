@@ -3,7 +3,10 @@ package com.senior.ai;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -12,6 +15,7 @@ public class AiOrchestrator {
 
     private final ChatClient.Builder chatClientBuilder;
     private final PersonaConfig personaConfig;
+    private final List<ToolCallbackProvider> toolCallbackProviders;
 
     public String generateReply(Long userId, String userMessage) {
         return generateReply(userId, userMessage, personaConfig.getSystemPrompt());
@@ -25,9 +29,14 @@ public class AiOrchestrator {
 
     private String generateReply(Long userId, String userMessage, String systemPrompt) {
         try {
-            ChatClient chatClient = chatClientBuilder
-                    .defaultSystem(systemPrompt)
-                    .build();
+            ChatClient.Builder builder = chatClientBuilder
+                    .defaultSystem(systemPrompt);
+
+            for (ToolCallbackProvider provider : toolCallbackProviders) {
+                builder = builder.defaultToolCallbacks(provider);
+            }
+
+            ChatClient chatClient = builder.build();
 
             return chatClient.prompt()
                     .user(userMessage)

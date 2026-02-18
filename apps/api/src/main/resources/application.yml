@@ -30,6 +30,15 @@ spring:
           model: claude-sonnet-4-5-20250929
           max-tokens: 1024
           temperature: 0.7
+    mcp:
+      client:
+        enabled: ${MCP_ENABLED:false}
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            weather:
+              url: ${MCP_WEATHER_URL:http://localhost:8091}
 
   security:
     user:

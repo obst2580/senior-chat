@@ -20,7 +20,7 @@ import type {
 } from '@/types/pastime';
 
 const API_BASE_URL =
-  Constants.expoConfig?.extra?.apiUrl ?? 'http://localhost:8082';
+  Constants.expoConfig?.extra?.apiUrl ?? 'https://seniorapi.gomgame.net';
 
 const TTS_BASE_URL =
   Constants.expoConfig?.extra?.ttsUrl ?? 'http://localhost:8090';
@@ -83,10 +83,12 @@ async function request<T>(
 export async function sendMessage(
   userId: number,
   message: string,
+  city?: string | null,
+  district?: string | null,
 ): Promise<ApiResponse<SendMessageResponse>> {
   return request<SendMessageResponse>('/api/v1/chat/send', {
     method: 'POST',
-    body: JSON.stringify({ userId, message }),
+    body: JSON.stringify({ userId, message, city, district }),
   });
 }
 

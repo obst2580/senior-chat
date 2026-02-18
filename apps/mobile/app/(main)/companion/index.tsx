@@ -8,10 +8,12 @@ import { COLORS } from '@/constants/colors';
 import { FONT_SIZES, LINE_HEIGHTS } from '@/constants/typography';
 import ChatWindow from '@/components/chat/ChatWindow';
 import { useCompanion } from '@/hooks/useCompanion';
+import { useLocation } from '@/hooks/useLocation';
 
 export default function CompanionScreen() {
   const router = useRouter();
   const { profile, loadProfile, error } = useCompanion();
+  const location = useLocation();
 
   useEffect(() => {
     loadProfile();
@@ -51,7 +53,12 @@ export default function CompanionScreen() {
       </View>
 
       <View style={styles.chatArea}>
-        <ChatWindow userId={1} companionName={companionName} />
+        <ChatWindow
+          userId={1}
+          companionName={companionName}
+          city={location.city}
+          district={location.district}
+        />
       </View>
     </SafeAreaView>
   );

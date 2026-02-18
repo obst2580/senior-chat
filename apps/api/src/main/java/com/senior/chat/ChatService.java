@@ -19,7 +19,7 @@ public class ChatService {
     private final CompanionService companionService;
 
     @Transactional
-    public ChatMessage chat(Long userId, String userMessage) {
+    public ChatMessage chat(Long userId, String userMessage, String city, String district) {
         ChatMessage userMsg = ChatMessage.builder()
                 .userId(userId)
                 .role("user")
@@ -29,8 +29,14 @@ public class ChatService {
         chatRepository.save(userMsg);
 
         CompanionProfile profile = companionService.getProfile(userId);
+
+        String locationContext = buildLocationContext(city, district);
+        String fullMessage = locationContext.isEmpty()
+                ? userMessage
+                : userMessage + "\n\n[사용자 위치: " + locationContext + "]";
+
         String aiReply = aiOrchestrator.generateReply(
-                userId, userMessage,
+                userId, fullMessage,
                 profile.getName(), profile.getAge(), profile.getDialect());
 
         ChatMessage assistantMsg = ChatMessage.builder()
@@ -45,5 +51,16 @@ public class ChatService {
     @Transactional(readOnly = true)
     public List<ChatMessage> getHistory(Long userId) {
         return chatRepository.findByUserIdOrderByCreatedAtAsc(userId);
+    }
+
+    private String buildLocationContext(String city, String district) {
+        if (city == null && district == null) return "";
+        StringBuilder sb = new StringBuilder();
+        if (city != null) sb.append(city);
+        if (district != null) {
+            if (!sb.isEmpty()) sb.append(" ");
+            sb.append(district);
+        }
+        return sb.toString();
     }
 }

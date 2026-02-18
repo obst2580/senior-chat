@@ -8,15 +8,20 @@ import { useChat } from '@/hooks/useChat';
 interface ChatWindowProps {
   readonly userId: number;
   readonly companionName?: string;
+  readonly city?: string | null;
+  readonly district?: string | null;
 }
 
 export default function ChatWindow({
   userId,
   companionName = '다솜이',
+  city,
+  district,
 }: ChatWindowProps) {
   const { messages, isLoading, isSpeaking, send } = useChat(
     userId,
     companionName,
+    { city: city ?? null, district: district ?? null },
   );
 
   return (

@@ -25,7 +25,8 @@ public class ChatController {
     @PostMapping("/send")
     public ResponseEntity<Map<String, Object>> sendMessage(
             @Valid @RequestBody ChatRequest request) {
-        ChatMessage assistantMessage = chatService.chat(request.userId(), request.message());
+        ChatMessage assistantMessage = chatService.chat(
+                request.userId(), request.message(), request.city(), request.district());
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "data", new SendMessageResponse(toDto(assistantMessage))
@@ -58,7 +59,9 @@ public class ChatController {
 
     public record ChatRequest(
             Long userId,
-            String message
+            String message,
+            String city,
+            String district
     ) {}
 
     public record MessageDto(

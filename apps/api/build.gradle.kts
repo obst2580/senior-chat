@@ -21,10 +21,9 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://repo.spring.io/milestone") }
 }
 
-extra["springAiVersion"] = "1.0.0-M5"
+extra["springAiVersion"] = "1.0.1"
 
 dependencyManagement {
     imports {
@@ -38,7 +37,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.ai:spring-ai-anthropic-spring-boot-starter")
+    implementation("org.springframework.ai:spring-ai-starter-model-anthropic")
+    implementation("org.springframework.ai:spring-ai-starter-mcp-client-webflux")
 
     runtimeOnly("org.postgresql:postgresql")
 

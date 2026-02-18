@@ -13,7 +13,16 @@ function createGreeting(companionName: string): Message {
   };
 }
 
-export function useChat(userId: number, companionName: string = '다솜이') {
+interface LocationInfo {
+  readonly city: string | null;
+  readonly district: string | null;
+}
+
+export function useChat(
+  userId: number,
+  companionName: string = '다솜이',
+  location?: LocationInfo,
+) {
   const [state, setState] = useState<ChatState>({
     messages: [createGreeting(companionName)],
     isLoading: false,
@@ -69,7 +78,12 @@ export function useChat(userId: number, companionName: string = '다솜이') {
         error: null,
       }));
 
-      const response = await sendMessage(userId, content.trim());
+      const response = await sendMessage(
+        userId,
+        content.trim(),
+        location?.city,
+        location?.district,
+      );
 
       if (response.success && response.data) {
         const aiMessage = response.data.message;
