@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/seniar_chat
-    username: seniar
-    password: seniar
+    url: jdbc:postgresql://localhost:5432/senior_chat
+    username: senior
+    password: senior
 
   jpa:
     hibernate:
@@ -14,8 +14,16 @@ spring:
       host: localhost
       port: 6379
 
+  ai:
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:sk-placeholder}
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
 logging:
   level:
-    com.seniar: DEBUG
+    com.senior: DEBUG
     org.springframework.ai: DEBUG
     org.hibernate.SQL: DEBUG

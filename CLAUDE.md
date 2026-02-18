@@ -1,4 +1,4 @@
-# Seniar Chat - AI Companion for Seniors
+# Senior Chat - AI Companion for Seniors
 
 > 시니어를 위한 AI 동반자 앱 - 자식들이 깔아주면 안심
 

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Seniar Chat",
-    "slug": "seniar-chat",
+    "name": "Senior Chat",
+    "slug": "senior-chat",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "seniar-chat",
+    "scheme": "senior-chat",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.seniar.chat"
+      "bundleIdentifier": "com.senior.chat"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFEF7"
       },
-      "package": "com.seniar.chat"
+      "package": "com.senior.chat"
     },
     "plugins": [
       "expo-router"

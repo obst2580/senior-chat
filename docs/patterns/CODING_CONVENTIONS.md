@@ -1,6 +1,6 @@
 # Coding Conventions
 
-이 문서는 `seniar-chat` 모노레포의 실제 구조(Expo Router + Spring Boot)에 맞춘 코딩 컨벤션이다.
+이 문서는 `senior-chat` 모노레포의 실제 구조(Expo Router + Spring Boot)에 맞춘 코딩 컨벤션이다.
 
 ## 파일 구조
 
@@ -43,7 +43,7 @@ apps/mobile/
 
 ```
 apps/api/
-└── src/main/java/com/seniar/
+└── src/main/java/com/senior/
     ├── ai/                    # Spring AI 통합
     ├── auth/                  # 인증
     ├── chat/                  # 채팅 도메인

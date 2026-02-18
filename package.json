@@ -1,12 +1,12 @@
 {
-  "name": "seniar-chat",
+  "name": "senior-chat",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "mobile": "pnpm --filter @seniar/mobile",
-    "mobile:start": "pnpm --filter @seniar/mobile start",
-    "mobile:ios": "pnpm --filter @seniar/mobile ios",
-    "mobile:android": "pnpm --filter @seniar/mobile android",
+    "mobile": "pnpm --filter @senior/mobile",
+    "mobile:start": "pnpm --filter @senior/mobile start",
+    "mobile:ios": "pnpm --filter @senior/mobile ios",
+    "mobile:android": "pnpm --filter @senior/mobile android",
     "api:dev": "cd apps/api && ./gradlew bootRun",
     "api:build": "cd apps/api && ./gradlew build",
     "api:test": "cd apps/api && ./gradlew test"

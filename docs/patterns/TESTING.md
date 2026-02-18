@@ -10,13 +10,13 @@
 
 - JUnit 5 기반 스프링 컨텍스트 테스트만 존재
 - 테스트 실행: `pnpm api:test` (단, 로컬 Java 설치 필요)
-- 관련 파일: `apps/api/src/test/java/com/seniar/SeniarApplicationTests.java`
+- 관련 파일: `apps/api/src/test/java/com/senior/SeniorApplicationTests.java`
 
 ### Mobile (Expo / React Native)
 
 - ESLint는 아직 의존성이 없어 `pnpm mobile lint`가 실패할 수 있음
 - 최소 검증: TypeScript typecheck
-  - 실행: `pnpm --filter @seniar/mobile exec tsc --noEmit`
+  - 실행: `pnpm --filter @senior/mobile exec tsc --noEmit`
 
 ## Phase 1 (목표)
 

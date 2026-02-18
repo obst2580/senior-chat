@@ -12,10 +12,10 @@
   - JPA 엔티티는 `Long` ID(IDENTITY) 기반
 - Chat
   - `chat_messages`는 `conversation_id`가 없고 `user_id` 기반으로 메시지를 묶는다
-  - 구현 파일: `apps/api/src/main/java/com/seniar/chat/ChatMessage.java`, `apps/api/src/main/java/com/seniar/chat/ChatRepository.java`
+  - 구현 파일: `apps/api/src/main/java/com/senior/chat/ChatMessage.java`, `apps/api/src/main/java/com/senior/chat/ChatRepository.java`
 - User
   - 최소 필드만 존재(전화번호, 닉네임, 구독 티어 등)
-  - 구현 파일: `apps/api/src/main/java/com/seniar/user/User.java`
+  - 구현 파일: `apps/api/src/main/java/com/senior/user/User.java`
 - Conversation/Subscription
   - Phase 1 목표(아래)로 계획되어 있으나 아직 미구현
 
@@ -149,10 +149,10 @@ CREATE TABLE subscriptions (
 
 ### Phase 0 (현재 구현)
 
-- `User`: `apps/api/src/main/java/com/seniar/user/User.java`
+- `User`: `apps/api/src/main/java/com/senior/user/User.java`
   - `Long id` (IDENTITY)
   - `phoneNumber`, `nickname`, `tier`, `createdAt`, `lastActiveAt`
-- `ChatMessage`: `apps/api/src/main/java/com/seniar/chat/ChatMessage.java`
+- `ChatMessage`: `apps/api/src/main/java/com/senior/chat/ChatMessage.java`
   - `Long id` (IDENTITY)
   - `Long userId`, `role`, `content`, `createdAt`
 

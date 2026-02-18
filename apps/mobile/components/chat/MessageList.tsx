@@ -9,21 +9,17 @@ import { type Message } from '@/types/chat';
 interface MessageListProps {
   readonly messages: readonly Message[];
   readonly isLoading: boolean;
+  readonly isSpeaking?: boolean;
+  readonly companionName?: string;
 }
 
-export default function MessageList({ messages, isLoading }: MessageListProps) {
+export default function MessageList({
+  messages,
+  isLoading,
+  isSpeaking = false,
+  companionName = '다솜이',
+}: MessageListProps) {
   const flatListRef = useRef<FlatList<Message>>(null);
-
-  if (messages.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyTitle}>안녕하세요!</Text>
-        <Text style={styles.emptySubtitle}>
-          다솜이에게 무엇이든 물어보세요
-        </Text>
-      </View>
-    );
-  }
 
   return (
     <FlatList
@@ -31,14 +27,31 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
       data={messages as Message[]}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <MessageBubble message={item} />}
-      contentContainerStyle={styles.listContent}
+      contentContainerStyle={
+        messages.length === 0 ? styles.emptyContent : styles.listContent
+      }
       onContentSizeChange={() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }}
+      ListEmptyComponent={
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyTitle}>
+            {companionName}에게 말을 걸어보세요
+          </Text>
+        </View>
+      }
       ListFooterComponent={
         isLoading ? (
           <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>다솜이가 생각하고 있어요...</Text>
+            <Text style={styles.loadingText}>
+              {companionName}이(가) 생각하고 있어요...
+            </Text>
+          </View>
+        ) : isSpeaking ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>
+              {companionName}이(가) 말하고 있어요...
+            </Text>
           </View>
         ) : null
       }
@@ -53,14 +66,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 32,
   },
-  emptyTitle: {
-    fontSize: FONT_SIZES.xxl,
-    lineHeight: LINE_HEIGHTS.xxl,
-    fontWeight: '700',
-    color: COLORS.text,
-    marginBottom: 12,
+  emptyContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
-  emptySubtitle: {
+  emptyTitle: {
     fontSize: FONT_SIZES.lg,
     lineHeight: LINE_HEIGHTS.lg,
     color: COLORS.textSecondary,

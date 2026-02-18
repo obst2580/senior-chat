@@ -22,6 +22,12 @@ export const COLORS = {
 
   white: '#FFFFFF',
   black: '#000000',
+
+  scheduleCardBg: '#F1F8E9',
+  pastimeCardBg: '#FFF3E0',
+  companionCallBg: '#E8EAF6',
+  gameCorrect: '#4CAF50',
+  gameIncorrect: '#EF5350',
 } as const;
 
 export type ColorKey = keyof typeof COLORS;

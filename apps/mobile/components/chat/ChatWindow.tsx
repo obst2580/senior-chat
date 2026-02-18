@@ -7,14 +7,26 @@ import { useChat } from '@/hooks/useChat';
 
 interface ChatWindowProps {
   readonly userId: number;
+  readonly companionName?: string;
 }
 
-export default function ChatWindow({ userId }: ChatWindowProps) {
-  const { messages, isLoading, send } = useChat(userId);
+export default function ChatWindow({
+  userId,
+  companionName = '다솜이',
+}: ChatWindowProps) {
+  const { messages, isLoading, isSpeaking, send } = useChat(
+    userId,
+    companionName,
+  );
 
   return (
     <View style={styles.container}>
-      <MessageList messages={messages} isLoading={isLoading} />
+      <MessageList
+        messages={messages}
+        isLoading={isLoading}
+        isSpeaking={isSpeaking}
+        companionName={companionName}
+      />
       <ChatInput onSend={send} disabled={isLoading} />
     </View>
   );

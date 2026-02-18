@@ -1,11 +1,11 @@
 spring:
   application:
-    name: seniar-api
+    name: senior-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/seniar_chat
-    username: ${DB_USERNAME:seniar}
-    password: ${DB_PASSWORD:seniar}
+    url: jdbc:postgresql://localhost:5432/senior_chat
+    username: ${DB_USERNAME:senior}
+    password: ${DB_PASSWORD:senior}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -41,5 +41,5 @@ server:
 
 logging:
   level:
-    com.seniar: INFO
+    com.senior: INFO
     org.springframework.ai: DEBUG

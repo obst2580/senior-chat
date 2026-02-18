@@ -1,4 +1,4 @@
-# Seniar Chat - Documentation Index
+# Senior Chat - Documentation Index
 
 > 시니어를 위한 AI 동반자 앱 - Expo + Spring Boot 모노레포
 
