@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.4.5",
+  "checkpoint_id": "2dcc1d37204b",
+  "session_id": "503c91be-5ab1-43ce-adc5-8d8091352c2f",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-19T14:52:33.506786Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "apps/api/build.gradle.kts",
+    "apps/api/src/main/java/com/senior/ai/AiOrchestrator.java",
+    "apps/api/src/main/java/com/senior/chat/ChatService.java",
+    "apps/api/src/main/resources/application-local.yml"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "531048f3cc52",
+  "token_usage": {
+    "input_tokens": 546,
+    "cache_creation_tokens": 341293,
+    "cache_read_tokens": 24661665,
+    "output_tokens": 7491,
+    "api_call_count": 230
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-19T14:52:32.659568Z",
+    "agent_lines": 27,
+    "human_added": 124,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 151,
+    "agent_percentage": 17.880794701986755
+  },
+  "transcript_path": ".claude/projects/-Users-obst2580-github-project-personal-senior-chat/503c91be-5ab1-43ce-adc5-8d8091352c2f.jsonl"
+}
