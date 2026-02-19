@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.4.5",
+  "checkpoint_id": "16bf58855a47",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 0,
+  "files_touched": [
+    ".gitignore",
+    "apps/api/src/main/java/com/senior/ai/AiOrchestrator.java",
+    "apps/api/src/main/java/com/senior/chat/ChatRepository.java",
+    "apps/api/src/main/java/com/senior/chat/ChatService.java",
+    "apps/api/src/main/resources/application-local.yml",
+    "apps/mobile/app.json",
+    "apps/tts-server/server.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/16/bf58855a47/0/metadata.json",
+      "transcript": "/16/bf58855a47/0/full.jsonl",
+      "context": "/16/bf58855a47/0/context.md",
+      "content_hash": "/16/bf58855a47/0/content_hash.txt",
+      "prompt": "/16/bf58855a47/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 495,
+    "cache_creation_tokens": 220879,
+    "cache_read_tokens": 21494602,
+    "output_tokens": 4026,
+    "api_call_count": 201
+  }
+}

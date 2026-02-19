@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.4.5",
+  "checkpoint_id": "16bf58855a47",
+  "session_id": "503c91be-5ab1-43ce-adc5-8d8091352c2f",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-19T12:47:32.526019Z",
+  "branch": "main",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "apps/api/src/main/resources/application-local.yml",
+    "apps/api/src/main/java/com/senior/chat/ChatRepository.java",
+    "apps/api/src/main/java/com/senior/chat/ChatService.java",
+    "apps/api/src/main/java/com/senior/ai/AiOrchestrator.java",
+    "apps/mobile/app.json",
+    "apps/tts-server/server.py",
+    ".gitignore"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "d4d1b816285d",
+  "token_usage": {
+    "input_tokens": 495,
+    "cache_creation_tokens": 220879,
+    "cache_read_tokens": 21494602,
+    "output_tokens": 4026,
+    "api_call_count": 201
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-19T12:47:31.857931Z",
+    "agent_lines": 139,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 139,
+    "agent_percentage": 100
+  },
+  "transcript_path": ".claude/projects/-Users-obst2580-github-project-personal-senior-chat/503c91be-5ab1-43ce-adc5-8d8091352c2f.jsonl"
+}
