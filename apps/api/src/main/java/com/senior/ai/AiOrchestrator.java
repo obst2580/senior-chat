@@ -1,12 +1,14 @@
 package com.senior.ai;
 
 import com.senior.chat.ChatMessage;
+import com.senior.user.User.SubscriptionTier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
 
@@ -20,23 +22,28 @@ public class AiOrchestrator {
 
     private final ChatClient.Builder chatClientBuilder;
     private final PersonaConfig personaConfig;
+    private final AiModelConfig aiModelConfig;
     private final List<ToolCallbackProvider> toolCallbackProviders;
 
     private volatile ChatClient toolAwareChatClient;
 
     public String generateReply(Long userId, String userMessage) {
-        return generateReply(userId, userMessage, List.of(), personaConfig.getSystemPrompt());
+        return generateReply(userId, userMessage, List.of(), personaConfig.getSystemPrompt(), SubscriptionTier.FREE);
     }
 
     public String generateReply(Long userId, String userMessage, List<ChatMessage> history,
-                                String name, int age, String dialect) {
+                                String name, int age, String dialect, SubscriptionTier tier) {
         String systemPrompt = personaConfig.getSystemPrompt(name, age, dialect);
-        return generateReply(userId, userMessage, history, systemPrompt);
+        return generateReply(userId, userMessage, history, systemPrompt, tier);
     }
 
     private String generateReply(Long userId, String userMessage,
-                                 List<ChatMessage> history, String systemPrompt) {
+                                 List<ChatMessage> history, String systemPrompt,
+                                 SubscriptionTier tier) {
         try {
+            String model = aiModelConfig.getModelForTier(tier);
+            log.debug("Using model {} for tier {}", model, tier);
+
             List<Message> messages = new ArrayList<>();
             for (ChatMessage msg : history) {
                 if ("user".equals(msg.getRole())) {
@@ -47,10 +54,15 @@ public class AiOrchestrator {
             }
             messages.add(new UserMessage(userMessage));
 
+            OpenAiChatOptions options = OpenAiChatOptions.builder()
+                    .model(model)
+                    .build();
+
             return getToolAwareClient()
                     .prompt()
                     .system(systemPrompt)
                     .messages(messages)
+                    .options(options)
                     .call()
                     .content();
         } catch (Exception e) {

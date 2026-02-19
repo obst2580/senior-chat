@@ -22,9 +22,6 @@ import type {
 const API_BASE_URL =
   Constants.expoConfig?.extra?.apiUrl ?? 'https://seniorapi.gomgame.net';
 
-const TTS_BASE_URL =
-  Constants.expoConfig?.extra?.ttsUrl ?? 'http://localhost:8090';
-
 interface ApiResponse<T> {
   readonly success: boolean;
   readonly data?: T;
@@ -148,14 +145,14 @@ export async function sendCompanionChat(
 // --- TTS (음성 생성) ---
 
 export function getTtsAudioUrl(text: string): string {
-  return `${TTS_BASE_URL}/tts`;
+  return `${API_BASE_URL}/api/v1/tts`;
 }
 
 export async function fetchTtsAudio(
   text: string,
 ): Promise<{ success: boolean; audioUri?: string; error?: string }> {
   try {
-    const response = await fetch(`${TTS_BASE_URL}/tts`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/tts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),

@@ -3,6 +3,9 @@ package com.senior.chat;
 import com.senior.ai.AiOrchestrator;
 import com.senior.companion.CompanionProfile;
 import com.senior.companion.CompanionService;
+import com.senior.user.User;
+import com.senior.user.User.SubscriptionTier;
+import com.senior.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final AiOrchestrator aiOrchestrator;
     private final CompanionService companionService;
+    private final UserRepository userRepository;
 
     @Transactional
     public ChatMessage chat(Long userId, String userMessage, String city, String district) {
@@ -29,6 +33,9 @@ public class ChatService {
         chatRepository.save(userMsg);
 
         CompanionProfile profile = companionService.getProfile(userId);
+        SubscriptionTier tier = userRepository.findById(userId)
+                .map(User::getTier)
+                .orElse(SubscriptionTier.FREE);
 
         String locationContext = buildLocationContext(city, district);
         String fullMessage = locationContext.isEmpty()
@@ -41,7 +48,7 @@ public class ChatService {
 
         String aiReply = aiOrchestrator.generateReply(
                 userId, fullMessage, recentHistory,
-                profile.getName(), profile.getAge(), profile.getDialect());
+                profile.getName(), profile.getAge(), profile.getDialect(), tier);
 
         ChatMessage assistantMsg = ChatMessage.builder()
                 .userId(userId)

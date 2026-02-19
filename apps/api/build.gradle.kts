@@ -37,7 +37,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.ai:spring-ai-starter-model-anthropic")
+    implementation("org.springframework.ai:spring-ai-starter-model-openai")
     implementation("org.springframework.ai:spring-ai-starter-mcp-client-webflux")
 
     runtimeOnly("org.postgresql:postgresql")
