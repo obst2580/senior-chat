@@ -35,8 +35,12 @@ public class ChatService {
                 ? userMessage
                 : userMessage + "\n\n[사용자 위치: " + locationContext + "]";
 
+        // Fetch recent history (newest first, then reverse to chronological order)
+        List<ChatMessage> recentHistory = chatRepository.findTop20ByUserIdOrderByCreatedAtDesc(userId)
+                .reversed();
+
         String aiReply = aiOrchestrator.generateReply(
-                userId, fullMessage,
+                userId, fullMessage, recentHistory,
                 profile.getName(), profile.getAge(), profile.getDialect());
 
         ChatMessage assistantMsg = ChatMessage.builder()

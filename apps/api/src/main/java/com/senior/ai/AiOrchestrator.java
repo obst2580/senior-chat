@@ -1,11 +1,16 @@
 package com.senior.ai;
 
+import com.senior.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -20,21 +25,32 @@ public class AiOrchestrator {
     private volatile ChatClient toolAwareChatClient;
 
     public String generateReply(Long userId, String userMessage) {
-        return generateReply(userId, userMessage, personaConfig.getSystemPrompt());
+        return generateReply(userId, userMessage, List.of(), personaConfig.getSystemPrompt());
     }
 
-    public String generateReply(Long userId, String userMessage,
+    public String generateReply(Long userId, String userMessage, List<ChatMessage> history,
                                 String name, int age, String dialect) {
         String systemPrompt = personaConfig.getSystemPrompt(name, age, dialect);
-        return generateReply(userId, userMessage, systemPrompt);
+        return generateReply(userId, userMessage, history, systemPrompt);
     }
 
-    private String generateReply(Long userId, String userMessage, String systemPrompt) {
+    private String generateReply(Long userId, String userMessage,
+                                 List<ChatMessage> history, String systemPrompt) {
         try {
+            List<Message> messages = new ArrayList<>();
+            for (ChatMessage msg : history) {
+                if ("user".equals(msg.getRole())) {
+                    messages.add(new UserMessage(msg.getContent()));
+                } else if ("assistant".equals(msg.getRole())) {
+                    messages.add(new AssistantMessage(msg.getContent()));
+                }
+            }
+            messages.add(new UserMessage(userMessage));
+
             return getToolAwareClient()
                     .prompt()
                     .system(systemPrompt)
-                    .user(userMessage)
+                    .messages(messages)
                     .call()
                     .content();
         } catch (Exception e) {

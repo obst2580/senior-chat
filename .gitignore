@@ -48,3 +48,7 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 apps/mcp-servers/
+
+# tools
+.claude/
+.entire/

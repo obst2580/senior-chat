@@ -25,6 +25,9 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "apiUrl": "http://localhost:8080"
+    }
   }
 }
