@@ -1,0 +1,156 @@
+Implement the following plan:
+
+# OpenAI 통합 마이그레이션 계획
+
+## Context
+현재 Anthropic Claude + 로컬 Qwen3 TTS 구조를 **OpenAI 단일 API**로 통합한다.
+- 대화: Claude → OpenAI GPT (구독 티어별 모델 선택)
+- TTS: 로컬 Qwen3 → OpenAI TTS API (백엔드에서 처리)
+- 목표: API 키 1개, 빠른 TTS, 티어별 모델 차등
+
+## 변경 파일 요약
+
+| 파일 | 변경 |
+|------|------|
+| `apps/api/build.gradle.kts` | anthropic → openai 의존성 교체 |
+| `apps/api/src/main/resources/application.yml` | openai 설정 + 티어별 모델 매핑 |
+| `apps/api/src/main/resources/application-local.yml` | openai 로컬 설정 |
+| `apps/api/src/main/java/com/senior/ai/AiModelConfig.java` | **신규** - 티어→모델 매핑 설정 클래스 |
+| `apps/api/src/main/java/com/senior/ai/AiOrchestrator.java` | 티어 파라미터 추가, 모델 동적 선택 |
+| `apps/api/src/main/java/com/senior/chat/ChatService.java` | UserRepository로 티어 조회 후 전달 |
+| `apps/api/src/main/java/com/senior/tts/TtsService.java` | **신규** - OpenAI TTS API 호출 |
+| `apps/api/src/main/java/com/senior/tts/TtsController.java` | **신규** - POST /api/v1/tts 엔드포인트 |
+| `apps/mobile/lib/api-client.ts` | TTS URL을 백엔드로 변경 |
+
+## Phase 1: 채팅 프로바이더 교체 + 티어별 모델
+
+### Step 1. build.gradle.kts (line 40)
+```
+- implementation("org.springframework.ai:spring-ai-starter-model-anthropic")
++ implementation("org.springframework.ai:spring-ai-starter-model-openai")
+```
+
+### Step 2. application.yml
+`spring.ai.anthropic` → `spring.ai.openai` 교체 + 커스텀 티어 매핑 추가:
+```yaml
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+          max-tokens: 1024
+          temperature: 0.7
+
+app:
+  ai:
+    models:
+      free: gpt-4o-mini
+      premium: gpt-4o
+    tts:
+      model: tts-1
+      voice: nova
+```
+
+### Step 3. application-local.yml
+`spring.ai.anthropic` → `spring.ai.openai` 교체 (timeout 60s 유지)
+
+### Step 4. AiModelConfig.java (신규)
+- `@ConfigurationProperties(prefix = "app.ai")`
+- `getModelForTier(SubscriptionTier)` → yml의 models 맵에서 모델명 반환
+- TTS 설정(model, voice) 포함
+
+### Step 5. AiOrchestrator.java
+- `generateReply()` 메서드에 `SubscriptionTier` 파라미터 추가
+- `OpenAiChatOptions.builder().model(model).build()`로 요청별 모델 지정
+- MCP 도구(날씨)는 그대로 동작 (ToolCallbackProvider는 프로바이더 무관)
+
+### Step 6. ChatService.java
+- `UserRepository` 주입
+- `userRepository.findById(userId).map(User::getTier).orElse(FREE)`로 티어 조회
+- `aiOrchestrator.generateReply(..., tier)` 호출
+
+## Phase 2: TTS 백엔드 엔드포인트
+
+### Step 7. TtsService.java (신규)
+- `RestClient`로 `https://api.openai.com/v1/audio/speech` 호출
+- `spring.ai.openai.api-key` 동일 키 사용
+- 문장 잘라내기 (2문장, 100자) 적용
+- MP3 포맷 반환
+
+### Step 8. TtsController.java (신규)
+- `POST /api/v1/tts` - `{ "text": "..." }` 받아서 `audio/mpeg` 바이트 반환
+- 기존 SecurityConfig의 `/api/**` permitAll 범위 내
+
+## Phase 3: 모바일 변경
+
+### Step 9. api-client.ts
+- `TTS_BASE_URL` 상수 제거
+- `fetchTtsAudio()`에서 `${API_BASE_URL}/api/v1/tts` 호출로 변경
+- 나머지(blob→dataURI 변환) 동일. MP3도 expo-av에서 재생 가능
+
+## 검증 방법
+1. `./gradlew compileJava` - 빌드 확인
+2. Spring Boot 기동 (`OPENAI_API_KEY` 환경변수 필요)
+3. curl로 채팅 테스트: `POST /api/v1/companion/chat`
+4. curl로 TTS 테스트: `POST /api/v1/tts`
+5. 날씨 MCP 도구 동작 확인 (날씨 물어보기)
+6. 시뮬레이터에서 전체 흐름 테스트
+
+## 필요 사항
+- OPENAI_API_KEY (chat + TTS 공용)
+- 로컬 Qwen3 TTS 서버 더 이상 불필요
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /Users/obst2580/.REDACTED.jsonl
+
+If this plan can be broken down into multiple independent tasks, consider using the TeamCreate tool to create a team and parallelize the work.
+
+---
+
+완료된거야?
+
+---
+
+REDACTED
+
+---
+
+export했어
+
+---
+
+응 돌려봐
+
+---
+
+응 죽여
+
+---
+
+.env 파일로 만들어줘
+
+---
+
+파일이 없는데?
+
+---
+
+저장했어
+
+---
+
+결제 추가했어 다시 테스트해봐
+
+---
+
+말을 끝까지 안하네? 일부러 그렇게 한거야?
+
+---
+
+전체 다 읽어줘. 제한 없애
+
+---
+
+커밋 하고 푸시하자
